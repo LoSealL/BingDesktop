@@ -28,8 +28,8 @@ class bingPaper():
         date = time.strftime('%Y-%m-%d',time.localtime())
         return date
     def getImg(self):
-        # reg = "(?<=g_img\=\{url\:.')+http\://s\.cn\.bing\.net/\w+/\w+/\w+/\w+-\w+1920x1080\.jpg"
-        reg = "(?<=g_img\=\{url\:..)+http\:../../s\.cn\.bing\.net../\w+../\w+../\w+../\w+-\w+1920x1080.jpg"
+        reg = "(?<=g_img\=\{url\:..)+http\://s\.cn\.bing\.net/\w+/\w+/\w+/\w+-\w+1920x1080.jpg"
+        # reg = "(?<=g_img\=\{url\:..)+http\:../../s\.cn\.bing\.net../\w+../\w+../\w+../\w+-\w+1920x1080.jpg"
         imgre = re.compile(reg)
         imglist = re.findall(imgre,str(self.html))
         if not imglist:
