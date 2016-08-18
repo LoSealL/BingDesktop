@@ -1,7 +1,7 @@
 @echo off
 d:
-cd d:\Works\PythonTEST\Bing\
-python getbing.py 0 0
+cd d:\Bing\
+python getbing.py child-prc.intel.com 913
 if EXIST *.jpg (
     move /Y *.jpg wallpaper
 )
