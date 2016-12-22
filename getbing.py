@@ -6,7 +6,6 @@ from PIL import Image
 import os,sys
 import win32gui,win32api,win32con
 
-
 class bingPaper():
     def __init__(self,homepage,proxy = False):
         self.homepage = homepage
@@ -28,19 +27,26 @@ class bingPaper():
         date = time.strftime('%Y-%m-%d',time.localtime())
         return date
     def getImg(self):
-        reg = "(?<=g_img\=\{url\:..)+http\://s\.cn\.bing\.net/\w+/\w+/\w+/\w+-\w+1920x1080.jpg"
-        # reg = "(?<=g_img\=\{url\:.')+http\://s\.cn\.bing\.net/\w+/\w+/\w+/\w+-\w+1920x1080\.jpg"
-        # reg = "(?<=g_img\=\{url\:..)+http\:../../s\.cn\.bing\.net../\w+../\w+../\w+../\w+-\w+1920x1080.jpg"
-        imgre = re.compile(reg)
-        imglist = re.findall(imgre,str(self.html))
+        spec_reg = False
+        reg1 = "(?<=g_img\=\{url\:..)+http\://s\.cn\.bing\.net/\w+/\w+/\w+/\w+-\w+1920x1080.jpg"
+        reg2 = "(?<=g_img\=\{url\:..)+/\w+/\w+/\w+/\w+-\w+1920x1080.jpg"
+        imgre1 = re.compile(reg1)
+        imgre2 = re.compile(reg2)
+        imglist = re.findall(imgre1,str(self.html))
         if not imglist:
-            fd = open('err.html','w')
-            fd.writelines(str(self.html))
-            fd.close()
-            return None
+            imglist = re.findall(imgre2,str(self.html))
+            spec_reg = True
+            if not imglist:
+                fd = open('err.html','w')
+                fd.writelines(str(self.html))
+                fd.close()
+                return None
         for imgurl in imglist:
+            if not spec_reg:
+                imgurl = imgurl.replace('\\','')
+            else:
+                imgurl = "http://cn.bing.com" + imgurl            
             print(imgurl)
-            imgurl = imgurl.replace('\\','')
             urlget.urlretrieve(imgurl,'[%s]%s' % (self.getDate(),imgurl[-20:]))
         return '['+self.getDate()+']'+imgurl[-20:]
 
