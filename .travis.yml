@@ -5,4 +5,4 @@ python:
   - "3.6"
 install:
   "pip install Image"
-script: buildtest.py
+script: python buildtest.py
