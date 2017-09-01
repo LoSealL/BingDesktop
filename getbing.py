@@ -7,13 +7,13 @@ import os,sys
 import win32gui,win32api,win32con
 
 class bingPaper():
-    def __init__(self,homepage,proxy = False):
+    def __init__(self,homepage):
         self.homepage = homepage
-        if len(sys.argv)==1:
-            print("Useage: %s [IP Address] [Port]\n" %sys.argv[0])
-        self.server = sys.argv[1]
-        self.port = sys.argv[2]
-        if proxy:
+        print("Useage: %s" %sys.argv[0])
+        print("Proxy Useage: %s [IP Address] [Port]" %sys.argv[0])
+        if len(sys.argv) == 3:
+            self.server = sys.argv[1]
+            self.port = sys.argv[2]
             print("Proxy server IP is: %s" %sys.argv[1])
             proxyHandle = urlget.ProxyHandler({"http":'http://'+self.server+':'+self.port})
             passwd = urlget.HTTPPasswordMgrWithDefaultRealm()
@@ -68,7 +68,7 @@ class setPaper():
         bmpImage.save(newPath, "BMP")
         self.setWallpaperFromBMP(newPath)
         
-myhtml = bingPaper("http://cn.bing.com",False)
+myhtml = bingPaper("http://cn.bing.com")
 fName = myhtml.getImg()
 if not fName:
     exit(0)
