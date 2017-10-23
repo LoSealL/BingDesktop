@@ -1,3 +1,7 @@
 wallpaper
+build
 *.bmp
 *.jpg
+.check.cache
+.vscode
+__pycache__
