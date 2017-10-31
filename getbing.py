@@ -37,7 +37,8 @@ class bingPaper():
     # this reg was deprecated since 2017.1
     reg1 = "(?<=g_img\=\{url\:..)+http\://s\.cn\.bing\.net/\w+/\w+/\w+/\w+-\w+1920x1080.jpg"
     reg2 = "(?<=g_img\=\{url\:..)+/\w+/\w+/\w+/\w+-\w+1920x1080.jpg"
-    imgre2 = re.compile(reg2)
+    reg3 = "(?<= {url:....)+/\w+../\w+../\w+../\w+-\w+1920x1080.jpg"
+    imgre2 = re.compile(reg3)
     imglist = re.findall(imgre2,str(self.html))
     if not imglist:
       fd = open('err.html','w')
