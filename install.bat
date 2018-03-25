@@ -13,7 +13,7 @@ for /f "tokens=2 delims=: " %%i in (.check.cache) do (
 if not %foundPywin32%==TRUE (
   echo Please download pywin32 that fits your python version
   python -V
-  explorer "https://sourceforge.net/projects/pywin32/files/pywin32/Build 221/"
+  explorer "https://github.com/mhammond/pywin32/releases"
 ) else (
   echo found pywin32
 )
