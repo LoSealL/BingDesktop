@@ -4,7 +4,8 @@ IF NOT EXIST wallpaper (
     mkdir wallpaper
 )
 REM call python script (python3 required)
-python getbing.py
+python getbing.py child-prc.intel.com 913
+REM python getbing.py
 REM we use converted bmp file as wallpaper, and store downloaded jpg(s).
 IF EXIST *.jpg (
     MOVE /Y *.jpg wallpaper
