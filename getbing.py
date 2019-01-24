@@ -74,4 +74,4 @@ class bingPaper():
     win32gui.SystemParametersInfo(win32con.SPI_SETDESKWALLPAPER, imagepath, 3)
 
 # app starts
-bingPaper("http://cn.bing.com").setWallPaper()
+bingPaper("https://www2.bing.com").setWallPaper()
