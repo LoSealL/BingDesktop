@@ -1,4 +1,5 @@
 @echo off
+
 REM REM make a wallpaper to store past images
 REM IF NOT EXIST wallpaper (
     REM mkdir wallpaper

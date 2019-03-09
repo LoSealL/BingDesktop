@@ -1,5 +1,6 @@
 # coding=utf-8
 import os
+import re
 import time
 import win32api
 import win32con
@@ -10,7 +11,7 @@ from PIL import Image
 from lxml.html import fromstring
 
 _MAIN_PAGES = [
-  "http://cn.bing.com/",
+  "https://cn.bing.com/",
   "https://www2.bing.com/",
   "https://www4.bing.com/",
   "http://www.bing.com/",
@@ -46,11 +47,12 @@ def main():
       print(" [!] {} connection error!".format(page))
       continue
   wallpaper_url = html.find(".//link[@href]").get('href')
-  assert wallpaper_url.endswith('.jpg')
+  print(wallpaper_url)
   wallpaper = sess.get(page + wallpaper_url, timeout=10)
   date = time.strftime('%Y-%m-%d', time.localtime())
-  temp_jpeg = "wallpaper/[{}]{}".format(date,
-                                        wallpaper_url.split('/')[-1])
+  pat = re.compile("\w*?\.jpg")
+  name = re.findall(pat, wallpaper_url)[0]
+  temp_jpeg = "wallpaper/[{}]{}.jpg".format(date, name)
   with open(temp_jpeg, 'wb') as fp:
     fp.write(wallpaper.content)
   Image.open(temp_jpeg).save('mywallpaper.bmp')
