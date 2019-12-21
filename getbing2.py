@@ -46,8 +46,10 @@ def main():
     except:
       print(" [!] {} connection error!".format(page))
       continue
-  wallpaper_url = html.find(".//link[@href]").get('href')
-  print(wallpaper_url)
+  wallpaper_url = html.find(".//link[@id]").get('href')
+  if not re.findall("\\d+x\\d+\.jpg", wallpaper_url):
+    wallpaper_url = html.find(".//link[@href]").get('href')
+  print(page + wallpaper_url)
   wallpaper = sess.get(page + wallpaper_url, timeout=10)
   date = time.strftime('%Y-%m-%d', time.localtime())
   pat = re.compile("\w*?\.jpg")
