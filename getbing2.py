@@ -14,7 +14,7 @@ _MAIN_PAGES = [
   "https://cn.bing.com/",
   "https://www2.bing.com/",
   "https://www4.bing.com/",
-  "http://www.bing.com/",
+  "https://www.bing.com/",
 ]
 
 
@@ -34,9 +34,12 @@ def set_wallpaper(imagepath):
 
 def main():
   sess = requests.session()
+  headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36"
+  }
   for page in _MAIN_PAGES:
     try:
-      bing = sess.get(page, timeout=5)
+      bing = sess.get(page, timeout=5, headers=headers)
       if bing.status_code == 200:
         html = fromstring(bing.content.decode())
         break
