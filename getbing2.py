@@ -11,58 +11,60 @@ from PIL import Image
 from lxml.html import fromstring
 
 _MAIN_PAGES = [
-  "https://cn.bing.com/",
-  "https://www2.bing.com/",
-  "https://www4.bing.com/",
-  "https://www.bing.com/",
+    "https://cn.bing.com/",
+    "https://www2.bing.com/",
+    "https://www4.bing.com/",
+    "https://www.bing.com/",
 ]
 
 
 def set_wallpaper(imagepath):
-  k = win32api.RegOpenKeyEx(
-    win32con.HKEY_CURRENT_USER,
-    "Control Panel\\Desktop",
-    0,
-    win32con.KEY_SET_VALUE)
-  win32api.RegSetValueEx(
-    k, "WallpaperStyle", 0, win32con.REG_SZ, "2")  # 2拉伸适应桌面,0桌面居中
-  win32api.RegSetValueEx(
-    k, "TileWallpaper", 0, win32con.REG_SZ, "0")
-  win32gui.SystemParametersInfo(
-    win32con.SPI_SETDESKWALLPAPER, imagepath, 3)
+    k = win32api.RegOpenKeyEx(
+        win32con.HKEY_CURRENT_USER,
+        "Control Panel\\Desktop",
+        0,
+        win32con.KEY_SET_VALUE)
+    win32api.RegSetValueEx(
+        k, "WallpaperStyle", 0, win32con.REG_SZ, "2")  # 2拉伸适应桌面,0桌面居中
+    win32api.RegSetValueEx(
+        k, "TileWallpaper", 0, win32con.REG_SZ, "0")
+    win32gui.SystemParametersInfo(
+        win32con.SPI_SETDESKWALLPAPER, imagepath, 3)
 
 
 def main():
-  sess = requests.session()
-  headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36"
-  }
-  for page in _MAIN_PAGES:
-    try:
-      bing = sess.get(page, timeout=5, headers=headers)
-      if bing.status_code == 200:
-        html = fromstring(bing.content.decode())
-        break
-      else:
-        print("HTTP error: {}".format(bing.status_code))
-        exit(1)
-    except:
-      print(" [!] {} connection error!".format(page))
-      continue
-  wallpaper_url = html.find(".//link[@id]").get('href')
-  if not re.findall("\\d+x\\d+\.jpg", wallpaper_url):
-    wallpaper_url = html.find(".//link[@href]").get('href')
-  print(page + wallpaper_url)
-  wallpaper = sess.get(page + wallpaper_url, timeout=10)
-  date = time.strftime('%Y-%m-%d', time.localtime())
-  pat = re.compile("\w*?\.jpg")
-  name = re.findall(pat, wallpaper_url)[0]
-  temp_jpeg = "wallpaper/[{}]{}.jpg".format(date, name)
-  with open(temp_jpeg, 'wb') as fp:
-    fp.write(wallpaper.content)
-  Image.open(temp_jpeg).save('mywallpaper.bmp')
-  set_wallpaper(os.getcwd() + '\\mywallpaper.bmp')
+    sess = requests.session()
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36"
+    }
+    for page in _MAIN_PAGES:
+        try:
+            bing = sess.get(page, timeout=5, headers=headers)
+            if bing.status_code == 200:
+                html = fromstring(bing.content.decode())
+                break
+            else:
+                print("HTTP error: {}".format(bing.status_code))
+                exit(1)
+        except:
+            print(" [!] {} connection error!".format(page))
+            continue
+    wallpaper_url = html.find(".//link[@id]").get('href')
+    if not re.findall("\\d+x\\d+\.jpg", wallpaper_url):
+        wallpaper_url = html.find(".//link[@href]").get('href')
+    if not wallpaper_url.startswith("https://"):
+        wallpaper_url = page + wallpaper_url
+    print(wallpaper_url)
+    wallpaper = sess.get(wallpaper_url, timeout=10)
+    date = time.strftime('%Y-%m-%d', time.localtime())
+    pat = re.compile("\w*?\.jpg")
+    name = re.findall(pat, wallpaper_url)[0]
+    temp_jpeg = "wallpaper/[{}]{}.jpg".format(date, name)
+    with open(temp_jpeg, 'wb') as fp:
+        fp.write(wallpaper.content)
+    Image.open(temp_jpeg).save('mywallpaper.bmp')
+    set_wallpaper(os.getcwd() + '\\mywallpaper.bmp')
 
 
 if __name__ == '__main__':
-  main()
+    main()
